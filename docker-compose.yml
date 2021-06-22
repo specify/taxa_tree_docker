@@ -1,0 +1,88 @@
+version: '3.9'
+
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - "./nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+      - "./index.html:/var/www/index.html:ro"
+      - "taxa_tree_gbif:/var/www/taxa_tree_gbif:ro"
+      - "taxa_tree_col:/var/www/taxa_tree_col:ro"
+      - "taxa_tree_itis:/var/www/taxa_tree_itis:ro"
+      - "taxa_tree_stats:/var/www/taxa_tree_stats:ro"
+    networks:
+      - front_end
+      - nginx
+    depends_on:
+      - front_end
+
+  database:
+    image: mariadb
+    volumes:
+      - "database:/var/lib/mysql"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - database
+
+  back_end:
+    build:
+      context: ./
+      target: back_end
+      args:
+        LINK: "http://localhost/"
+        MYSQL_HOST: database
+        MYSQL_USER: root
+        MYSQL_PASSWORD: root
+    volumes:
+      - "taxa_tree_gbif:/home/specify/taxa_tree_gbif"
+      - "taxa_tree_col:/home/specify/taxa_tree_col"
+      - "taxa_tree_itis:/home/specify/taxa_tree_itis"
+      - "taxa_tree_stats:/home/specify/taxa_tree_stats"
+      - "taxa_tree_gbif_working_dir:/home/specify/taxa_tree_gbif_working_dir"
+      - "taxa_tree_col_working_dir:/home/specify/taxa_tree_col_working_dir"
+      - "taxa_tree_itis_working_dir:/home/specify/taxa_tree_itis_working_dir"
+      - "taxa_tree_stats_working_dir:/home/specify/taxa_tree_stats_working_dir"
+    networks:
+      - database
+      - nginx
+    depends_on:
+      - database
+
+  front_end:
+    build:
+      context: ./
+      target: front_end
+    volumes:
+      # TODO: mount these as read only
+      - "taxa_tree_gbif:/var/www/taxa_tree_gbif"
+      - "taxa_tree_col:/var/www/taxa_tree_col"
+      - "taxa_tree_itis:/var/www/taxa_tree_itis"
+      - "taxa_tree_stats:/var/www/taxa_tree_stats"
+      - "taxa_tree_gbif_working_dir:/var/www/taxa_tree_gbif_working_dir"
+      - "taxa_tree_col_working_dir:/var/www/taxa_tree_col_working_dir"
+      - "taxa_tree_itis_working_dir:/var/www/taxa_tree_itis_working_dir/"
+      - "taxa_tree_stats_working_dir:/var/www/taxa_tree_stats_working_dir"
+    networks:
+      - front_end
+
+networks:
+  nginx:
+    driver: bridge
+  database:
+    driver: bridge
+  front_end:
+    driver: bridge
+
+volumes:
+  database:
+  taxa_tree_gbif:
+  taxa_tree_col:
+  taxa_tree_itis:
+  taxa_tree_stats:
+  taxa_tree_gbif_working_dir:
+  taxa_tree_col_working_dir:
+  taxa_tree_itis_working_dir:
+  taxa_tree_stats_working_dir:
