@@ -17,7 +17,7 @@ WORKDIR /home/specify
 
 COPY requirements.txt .
 RUN python3 -m venv venv \
- && venv/bin/pip install --no-cache-dir -r requirements.txt
+  && venv/bin/pip install --no-cache-dir -r requirements.txt
 
 COPY --chown=specify:specify taxa_tree_gbif taxa_tree_gbif
 COPY --chown=specify:specify taxa_tree_col taxa_tree_col
@@ -30,7 +30,7 @@ RUN echo -e \
   "\nmysql_host = 'database'" \
   "\nmysql_user = 'root'" \
   "\nmysql_password = 'root'" \
-  > taxa_tree_gbif/back_end/config.py
+  >taxa_tree_gbif/back_end/config.py
 
 RUN echo -e \
   "<?php" \
@@ -38,7 +38,7 @@ RUN echo -e \
   "\ndefine('LINK', '${LINK}gbif/');" \
   "\ndefine('WORKING_LOCATION','/var/www/taxa_tree_gbif_working_dir/');" \
   "\ndefine('STATS_URL', 'http://nginx/stats/collect/');" \
-  > taxa_tree_gbif/front_end/config/required.php
+  >taxa_tree_gbif/front_end/config/required.php
 
 RUN echo -e \
   "<?php" \
@@ -46,7 +46,7 @@ RUN echo -e \
   "\ndefine('LINK', '${LINK}col/');" \
   "\ndefine('WORKING_LOCATION','/var/www/taxa_tree_col_working_dir/');" \
   "\ndefine('STATS_URL', 'http://nginx/stats/collect/');" \
-  > taxa_tree_col/config/required.php
+  >taxa_tree_col/config/required.php
 
 RUN echo -e \
   "site_link = 'http://nginx/col/'" \
@@ -54,7 +54,7 @@ RUN echo -e \
   "\nmysql_host = 'database'" \
   "\nmysql_user = 'root'" \
   "\nmysql_password = 'root'" \
-  > taxa_tree_col/back_end/config.py
+  >taxa_tree_col/back_end/config.py
 
 RUN echo -e \
   "site_link = 'http://nginx/itis/'" \
@@ -62,7 +62,7 @@ RUN echo -e \
   "\nmysql_host = 'database'" \
   "\nmysql_user = 'root'" \
   "\nmysql_password = 'root'" \
-  > taxa_tree_itis/back_end/config.py
+  >taxa_tree_itis/back_end/config.py
 
 RUN echo -e \
   "<?php" \
@@ -70,30 +70,29 @@ RUN echo -e \
   "\ndefine('LINK', '${LINK}itis/');" \
   "\ndefine('WORKING_LOCATION','/var/www/taxa_tree_itis_working_dir/');" \
   "\ndefine('STATS_URL', 'http://nginx/stats/collect/');" \
-  > taxa_tree_itis/front_end/config/required.php
+  >taxa_tree_itis/front_end/config/required.php
 
 RUN echo -e \
   "<?php" \
   "\ndefine('DEVELOPMENT', FALSE);" \
   "\ndefine('LINK', '${LINK}stats/');" \
   "\ndefine('WORKING_LOCATION','/var/www/taxa_tree_stats_working_dir/');" \
-  > taxa_tree_stats/config/required.php
+  >taxa_tree_stats/config/required.php
 
 COPY --chown=specify:specify docker-entrypoint.sh .
 
 RUN mkdir \
-      taxa_tree_gbif_working_dir \
-      taxa_tree_col_working_dir \
-      taxa_tree_itis_working_dir \
-      taxa_tree_stats_working_dir \
- && chmod -R 777 \
-      taxa_tree_gbif_working_dir \
-      taxa_tree_col_working_dir \
-      taxa_tree_itis_working_dir \
-      taxa_tree_stats_working_dir
+  taxa_tree_gbif_working_dir \
+  taxa_tree_col_working_dir \
+  taxa_tree_itis_working_dir \
+  taxa_tree_stats_working_dir \
+  && chmod -R 777 \
+    taxa_tree_gbif_working_dir \
+    taxa_tree_col_working_dir \
+    taxa_tree_itis_working_dir \
+    taxa_tree_stats_working_dir
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
-
 
 FROM php:7.4-fpm-alpine3.13 as front_end
 
@@ -101,7 +100,7 @@ LABEL maintainer="Specify Collections Consortium <github.com/specify>"
 
 # Install zip PHP module
 RUN apk add --no-cache libzip-dev \
- && docker-php-ext-install zip
+  && docker-php-ext-install zip
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 RUN echo -e \
@@ -109,7 +108,7 @@ RUN echo -e \
   "\nmax_execution_time = 3600" \
   "\nbuffer-size=65535" \
   "\noutput_buffering=65535" \
-  >> "$PHP_INI_DIR/php.ini"
+  >>"$PHP_INI_DIR/php.ini"
 
 RUN addgroup -S specify -g 1001 && adduser -S specify -G specify -u 1001
 USER specify
