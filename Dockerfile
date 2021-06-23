@@ -20,7 +20,6 @@ RUN python3 -m venv venv \
   && venv/bin/pip install --no-cache-dir -r requirements.txt
 
 COPY --chown=specify:specify taxa_tree_gbif taxa_tree_gbif
-COPY --chown=specify:specify taxa_tree_col taxa_tree_col
 COPY --chown=specify:specify taxa_tree_itis taxa_tree_itis
 COPY --chown=specify:specify taxa_tree_stats taxa_tree_stats
 
@@ -39,22 +38,6 @@ RUN echo -e \
   "\ndefine('WORKING_LOCATION','/var/www/taxa_tree_gbif_working_dir/');" \
   "\ndefine('STATS_URL', 'http://nginx/stats/collect/');" \
   >taxa_tree_gbif/front_end/config/required.php
-
-RUN echo -e \
-  "<?php" \
-  "\ndefine('DEVELOPMENT', FALSE);" \
-  "\ndefine('LINK', '${LINK}col/');" \
-  "\ndefine('WORKING_LOCATION','/var/www/taxa_tree_col_working_dir/');" \
-  "\ndefine('STATS_URL', 'http://nginx/stats/collect/');" \
-  >taxa_tree_col/config/required.php
-
-RUN echo -e \
-  "site_link = 'http://nginx/col/'" \
-  "\ntarget_dir = '/home/specify/taxa_tree_col_working_dir/'" \
-  "\nmysql_host = 'database'" \
-  "\nmysql_user = 'root'" \
-  "\nmysql_password = 'root'" \
-  >taxa_tree_col/back_end/config.py
 
 RUN echo -e \
   "site_link = 'http://nginx/itis/'" \
@@ -80,15 +63,14 @@ RUN echo -e \
   >taxa_tree_stats/config/required.php
 
 COPY --chown=specify:specify docker-entrypoint.sh .
+COPY --chown=specify:specify update-taxa.sh .
 
 RUN mkdir \
   taxa_tree_gbif_working_dir \
-  taxa_tree_col_working_dir \
   taxa_tree_itis_working_dir \
   taxa_tree_stats_working_dir \
   && chmod -R 777 \
     taxa_tree_gbif_working_dir \
-    taxa_tree_col_working_dir \
     taxa_tree_itis_working_dir \
     taxa_tree_stats_working_dir
 
