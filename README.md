@@ -8,11 +8,30 @@ Dockerized version of
 Clone the repositories:
 
 ```bash
+git clone https://github.com/specify/taxa_tree
+cd taxa_tree
 git clone --single-branch --branch main https://github.com/specify/taxa_tree ./taxa_tree_gbif
 git clone --single-branch --branch itis https://github.com/specify/taxa_tree ./taxa_tree_itis
 git clone --single-branch --branch catalogue_of_life_3 https://github.com/specify/taxa_tree ./taxa_tree_col 
 git clone --single-branch --branch master https://github.com/specify/taxa_tree_stats ./taxa_tree_stats
 ```
+
+Install certbot and generate the certificates
+
+```
+sudo certbot certonly -d taxon.specifysoftware.org
+```
+
+Modify the nginx's volumes section of `docker-compose.yml` to point to
+the location of `fullchain.pem` and `privkey.pem`
+
+```yaml
+      - './fullchain.pem:/etc/letsencrypt/live/taxon.specifysoftware.org/fullchain.pem:ro'
+      - './privkey.pem:/etc/letsencrypt/live/taxon.specifysoftware.org/privkey.pem:ro'
+```
+
+You can configure regular certificate renewal, but that is beyound
+the scope of this documentation
 
 ## Config
 
@@ -20,7 +39,7 @@ Find the following line in the `./docker-compose.yml` file:
 
 ```yml
 args:
-  LINK: 'http://taxon.specifysoftware.org'
+  LINK: 'https://taxon.specifysoftware.org'
 ```
 
 Change the `LINK` variable to an address where the server would be publicly
@@ -44,10 +63,10 @@ created.
 ## Regular updates
 
 It is recommended to also configure a CRON job to check for taxa updates from
-each provider
+each provider.
 
 Example crontab:
 
 ```
-0 4 * * * docker exec taxa_docker_back_end_1 docker-entrypoint.sh
+0 4 * * * docker exec taxa_tree_docker_back_end_1 ./update-taxa.sh >> /home/specify/update-taxa.log 2>&1
 ```
