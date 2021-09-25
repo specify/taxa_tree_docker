@@ -10,6 +10,7 @@ Clone the repositories:
 ```bash
 git clone --single-branch --branch main https://github.com/specify/taxa_tree ./taxa_tree_gbif
 git clone --single-branch --branch itis https://github.com/specify/taxa_tree ./taxa_tree_itis
+git clone --single-branch --branch catalogue_of_life_3 https://github.com/specify/taxa_tree ./taxa_tree_col 
 git clone --single-branch --branch master https://github.com/specify/taxa_tree_stats ./taxa_tree_stats
 ```
 
@@ -24,6 +25,9 @@ args:
 
 Change the `LINK` variable to an address where the server would be publicly
 available.
+
+To disable a certain provider, remove it from `update-taxa.sh` and
+`index.html`.
 
 ## Usage
 

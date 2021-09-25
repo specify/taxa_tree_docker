@@ -10,6 +10,7 @@ services:
       - './index.html:/var/www/index.html:ro'
       - 'taxa_tree_gbif:/var/www/taxa_tree_gbif:ro'
       - 'taxa_tree_itis:/var/www/taxa_tree_itis:ro'
+      - 'taxa_tree_col:/var/www/taxa_tree_col:ro'
       - 'taxa_tree_stats:/var/www/taxa_tree_stats:ro'
     networks:
       - front_end
@@ -21,6 +22,7 @@ services:
     image: mariadb
     volumes:
       - 'database:/var/lib/mysql'
+      - 'taxa_tree_col_working_dir:/home/specify/taxa_tree_col_working_dir'
     environment:
       - MYSQL_ROOT_PASSWORD=root
     networks:
@@ -38,9 +40,11 @@ services:
     volumes:
       - 'taxa_tree_gbif:/home/specify/taxa_tree_gbif'
       - 'taxa_tree_itis:/home/specify/taxa_tree_itis'
+      - 'taxa_tree_col:/home/specify/taxa_tree_col'
       - 'taxa_tree_stats:/home/specify/taxa_tree_stats'
       - 'taxa_tree_gbif_working_dir:/home/specify/taxa_tree_gbif_working_dir'
       - 'taxa_tree_itis_working_dir:/home/specify/taxa_tree_itis_working_dir'
+      - 'taxa_tree_col_working_dir:/home/specify/taxa_tree_col_working_dir'
       - 'taxa_tree_stats_working_dir:/home/specify/taxa_tree_stats_working_dir'
     networks:
       - database
@@ -53,12 +57,13 @@ services:
       context: ./
       target: front_end
     volumes:
-      # TODO: mount these as read only
-      - 'taxa_tree_gbif:/var/www/taxa_tree_gbif'
-      - 'taxa_tree_itis:/var/www/taxa_tree_itis'
-      - 'taxa_tree_stats:/var/www/taxa_tree_stats'
+      - 'taxa_tree_gbif:/var/www/taxa_tree_gbif:ro'
+      - 'taxa_tree_itis:/var/www/taxa_tree_itis:ro'
+      - 'taxa_tree_col:/var/www/taxa_tree_col:ro'
+      - 'taxa_tree_stats:/var/www/taxa_tree_stats:ro'
       - 'taxa_tree_gbif_working_dir:/var/www/taxa_tree_gbif_working_dir'
       - 'taxa_tree_itis_working_dir:/var/www/taxa_tree_itis_working_dir/'
+      - 'taxa_tree_col_working_dir:/var/www/taxa_tree_col_working_dir'
       - 'taxa_tree_stats_working_dir:/var/www/taxa_tree_stats_working_dir'
     networks:
       - front_end
@@ -75,7 +80,9 @@ volumes:
   database:
   taxa_tree_gbif:
   taxa_tree_itis:
+  taxa_tree_col:
   taxa_tree_stats:
   taxa_tree_gbif_working_dir:
   taxa_tree_itis_working_dir:
+  taxa_tree_col_working_dir:
   taxa_tree_stats_working_dir:
