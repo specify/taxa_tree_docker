@@ -12,6 +12,7 @@ services:
       - 'taxa_tree_gbif:/var/www/taxa_tree_gbif:ro'
       - 'taxa_tree_itis:/var/www/taxa_tree_itis:ro'
       - 'taxa_tree_col:/var/www/taxa_tree_col:ro'
+      - 'taxa_tree_worms:/var/www/taxa_tree_worms:ro'
       - 'taxa_tree_stats:/var/www/taxa_tree_stats:ro'
       - './fullchain.pem:/etc/letsencrypt/live/taxon.specifysoftware.org/fullchain.pem:ro'
       - './privkey.pem:/etc/letsencrypt/live/taxon.specifysoftware.org/privkey.pem:ro'
@@ -26,6 +27,7 @@ services:
     volumes:
       - 'database:/var/lib/mysql'
       - 'taxa_tree_col_working_dir:/home/specify/taxa_tree_col_working_dir'
+      - 'taxa_tree_worms_working_dir:/home/specify/taxa_tree_worms_working_dir'
     environment:
       - MYSQL_ROOT_PASSWORD=root
     networks:
@@ -36,7 +38,7 @@ services:
       context: ./
       target: back_end
       args:
-        LINK: 'https://taxon.specifysoftware.org'
+        LINK: 'http://localhost/'
         MYSQL_HOST: database
         MYSQL_USER: root
         MYSQL_PASSWORD: root
@@ -44,10 +46,12 @@ services:
       - 'taxa_tree_gbif:/home/specify/taxa_tree_gbif'
       - 'taxa_tree_itis:/home/specify/taxa_tree_itis'
       - 'taxa_tree_col:/home/specify/taxa_tree_col'
+      - 'taxa_tree_worms:/home/specify/taxa_tree_worms'
       - 'taxa_tree_stats:/home/specify/taxa_tree_stats'
       - 'taxa_tree_gbif_working_dir:/home/specify/taxa_tree_gbif_working_dir'
       - 'taxa_tree_itis_working_dir:/home/specify/taxa_tree_itis_working_dir'
       - 'taxa_tree_col_working_dir:/home/specify/taxa_tree_col_working_dir'
+      - 'taxa_tree_worms_working_dir:/home/specify/taxa_tree_worms_working_dir'
       - 'taxa_tree_stats_working_dir:/home/specify/taxa_tree_stats_working_dir'
     networks:
       - database
@@ -63,10 +67,12 @@ services:
       - 'taxa_tree_gbif:/var/www/taxa_tree_gbif:ro'
       - 'taxa_tree_itis:/var/www/taxa_tree_itis:ro'
       - 'taxa_tree_col:/var/www/taxa_tree_col:ro'
+      - 'taxa_tree_worms:/var/www/taxa_tree_worms:ro'
       - 'taxa_tree_stats:/var/www/taxa_tree_stats:ro'
       - 'taxa_tree_gbif_working_dir:/var/www/taxa_tree_gbif_working_dir'
       - 'taxa_tree_itis_working_dir:/var/www/taxa_tree_itis_working_dir/'
       - 'taxa_tree_col_working_dir:/var/www/taxa_tree_col_working_dir'
+      - 'taxa_tree_worms_working_dir:/var/www/taxa_tree_worms_working_dir'
       - 'taxa_tree_stats_working_dir:/var/www/taxa_tree_stats_working_dir'
     networks:
       - front_end
@@ -84,8 +90,10 @@ volumes:
   taxa_tree_gbif:
   taxa_tree_itis:
   taxa_tree_col:
+  taxa_tree_worms:
   taxa_tree_stats:
   taxa_tree_gbif_working_dir:
   taxa_tree_itis_working_dir:
   taxa_tree_col_working_dir:
+  taxa_tree_worms_working_dir:
   taxa_tree_stats_working_dir:

@@ -22,6 +22,7 @@ RUN python3 -m venv venv \
 COPY --chown=specify:specify taxa_tree_gbif taxa_tree_gbif
 COPY --chown=specify:specify taxa_tree_itis taxa_tree_itis
 COPY --chown=specify:specify taxa_tree_col taxa_tree_col
+COPY --chown=specify:specify taxa_tree_worms taxa_tree_worms
 COPY --chown=specify:specify taxa_tree_stats taxa_tree_stats
 
 RUN echo -e \
@@ -78,6 +79,26 @@ RUN echo -e \
 RUN echo -e \
   "<?php" \
   "\ndefine('DEVELOPMENT', FALSE);" \
+  "\ndefine('LINK', '${LINK}worms/');" \
+  "\ndefine('WORKING_LOCATION','/var/www/taxa_tree_worms_working_dir/');" \
+  "\ndefine('STATS_URL', 'http://nginx/stats/collect/');" \
+  >taxa_tree_worms/front_end/config/required.php
+
+RUN echo -e \
+  "site_link = 'http://nginx/worms/'" \
+  "\ntarget_dir = '/home/specify/taxa_tree_worms_working_dir/'" \
+  "\nmysql_database = 'worms'" \
+  "\nmysql_host = 'database'" \
+  "\nmysql_user = 'root'" \
+  "\nmysql_password = 'root'" \
+  "\ndocker_container = ''" \
+  "\nmysql_command = 'mysql'" \
+  "\ndocker_dir = target_dir" \
+  >taxa_tree_worms/back_end/config.py
+
+RUN echo -e \
+  "<?php" \
+  "\ndefine('DEVELOPMENT', FALSE);" \
   "\ndefine('LINK', '${LINK}stats/');" \
   "\ndefine('WORKING_LOCATION','/var/www/taxa_tree_stats_working_dir/');" \
   >taxa_tree_stats/config/required.php
@@ -89,11 +110,13 @@ RUN mkdir \
   taxa_tree_gbif_working_dir \
   taxa_tree_itis_working_dir \
   taxa_tree_col_working_dir \
+  taxa_tree_worms_working_dir \
   taxa_tree_stats_working_dir \
   && chmod -R 777 \
     taxa_tree_gbif_working_dir \
     taxa_tree_itis_working_dir \
     taxa_tree_col_working_dir \
+    taxa_tree_worms_working_dir \
     taxa_tree_stats_working_dir
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
