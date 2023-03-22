@@ -13,7 +13,7 @@ Clone the repositories:
 ```bash
 git clone https://github.com/specify/taxa_tree
 cd taxa_tree
-git clone --single-branch --branch main https://github.com/specify/taxa_tree ./taxa_tree_gbif
+git clone --single-branch --branch gbif https://github.com/specify/taxa_tree ./taxa_tree_gbif
 git clone --single-branch --branch itis https://github.com/specify/taxa_tree ./taxa_tree_itis
 git clone --single-branch --branch catalogue_of_life_3 https://github.com/specify/taxa_tree ./taxa_tree_col 
 git clone --single-branch --branch master https://github.com/specify/taxa_tree_stats ./taxa_tree_stats
@@ -63,6 +63,14 @@ docker-compose up
 The first startup may take quite some time as the base container images are
 downloaded, containers are built, taxa trees are downloaded and cache is
 created.
+
+### Copying WoRMS archive
+
+Once you have obtained an archive of WoRMS data, you need to copy it to the correct directory in the back end container to generate the tree.
+
+```bash
+docker cp /full/path/on/your/system/to/archive.zip <backEndContainerName>:/home/specify/taxa_tree_worms_working_dir/archive.zip
+```
 
 ## Regular updates
 
