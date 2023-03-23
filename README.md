@@ -17,7 +17,7 @@ git clone --single-branch --branch gbif https://github.com/specify/taxa_tree ./t
 git clone --single-branch --branch itis https://github.com/specify/taxa_tree ./taxa_tree_itis
 git clone --single-branch --branch catalogue_of_life_3 https://github.com/specify/taxa_tree ./taxa_tree_col 
 git clone --single-branch --branch master https://github.com/specify/taxa_tree_stats ./taxa_tree_stats
-git clone --single-branch --branch worms https://github.com/specify/taxa_tree_worms ./taxa_tree_worms
+git clone --single-branch --branch worms https://github.com/specify/taxa_tree ./taxa_tree_worms
 ```
 
 Install certbot and generate the certificates
