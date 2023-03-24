@@ -72,14 +72,6 @@ Once you have obtained an archive of WoRMS data, you need to copy it to the corr
 docker cp /full/path/on/your/system/to/archive.zip <backEndContainerName>:/home/specify/taxa_tree_worms_working_dir/archive.zip
 ```
 
-### Refresh data
-
-Once you enter the back-end container, navigate to `taxa_tree_worms/back_end/` and run `refresh_data.py`
-
-```
-~/taxa_tree_worms/back_end $ python3 refresh_data.py
-```
-
 ## Regular updates
 
 It is recommended to also configure a CRON job to check for taxa updates from
