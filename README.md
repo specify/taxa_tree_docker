@@ -88,6 +88,11 @@ docker cp /full/path/on/your/system/to/archive.zip taxa_tree_docker-back_end-1:/
 
 To begin, you'll need to call the `update-taxa` shell script file in the back-end container.
 
+To update all sources, you can run this command:
+```bash
+docker exec taxa_tree_docker-back_end-1 ./update-taxa.sh
+```
+
 **Catalogue of Life:**
 ```bash
 docker exec taxa_tree_docker-back_end-1 sh -c "cd /home/specify/taxa_tree_col/back_end/ && /home/specify/venv/bin/python3 refresh_data.py"
