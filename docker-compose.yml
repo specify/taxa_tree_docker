@@ -23,11 +23,12 @@ services:
       - front_end
 
   database:
-    image: mariadb
+    image: mariadb:10.5
     volumes:
       - 'database:/var/lib/mysql'
       - 'taxa_tree_col_working_dir:/home/specify/taxa_tree_col_working_dir'
       - 'taxa_tree_worms_working_dir:/home/specify/taxa_tree_worms_working_dir'
+      - './mariadb-config/my.cnf:/etc/mysql/my.cnf'
     environment:
       - MYSQL_ROOT_PASSWORD=root
     networks:

@@ -2,7 +2,7 @@ FROM python:3.9-alpine as back_end
 
 LABEL maintainer="Specify Collections Consortium <github.com/specify>"
 
-RUN apk add --no-cache mysql-client
+RUN apk add --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/v3.14/main/ mariadb-client=10.5.19-r0
 
 RUN addgroup -S specify -g 1001 && adduser -S specify -G specify -u 1001
 USER specify
